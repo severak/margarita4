@@ -62,5 +62,23 @@ order by printf(\"%8s\", route_short_name) asc")->many();
 	Flight::render('footer', []);
 });
 
+Flight::route('/@net/search/', function($net){
+	$db = get_db($net);
+	
+	$searchFor = '';
+	$stops = array();
+	$routes = array();
+	
+	if (!empty($_GET['search'])) {
+		$searchFor = $_GET['search'];
+
+		$stops = $db->sql('SELECT * FROM stops WHERE stop_name LIKE '. $db->quote('%' . $searchFor . '%') . ' AND location_type!=1 ORDER BY stop_name')->many();
+		$routes = $db->sql('SELECT * FROM routes WHERE route_short_name LIKE '. $db->quote($searchFor) . ' LIMIT 20')->many();
+	}
+	
+	Flight::render('header', array('title' => 'hledání'));
+	Flight::render('search', ["net"=>$net, 'search'=>$searchFor, 'routes'=>$routes, 'stops'=>$stops]);
+	Flight::render('footer', []);
+});
 
 Flight::start();
