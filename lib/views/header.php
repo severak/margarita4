@@ -9,3 +9,6 @@
 </head>
 <body>
 	
+<div style="margin: auto; max-width: 35em;">	
+<h1><img src="/st/img/aiga_ground.svg" style="height: 1em"> jízdní řády</h1>
+<hr>
