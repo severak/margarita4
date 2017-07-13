@@ -81,4 +81,36 @@ Flight::route('/@net/search/', function($net){
 	Flight::render('footer', []);
 });
 
+Flight::route('/@net/stop/@stop_id/', function($net, $stop_id){
+	$db = get_db($net);
+	$stop = $db->from('stops')->where(['stop_id'=>$stop_id])->one();
+	
+	/*
+	
+	SELECT *
+FROM stop_times 
+JOIN trips ON stop_times.trip_id=trips.trip_id
+JOIN routes ON trips.route_id=routes.route_id
+WHERE stop_times.stop_id="U7Z2" AND departure_time>"08:00:00"
+ORDER BY departure_time ASC
+LIMIT 20
+	*/
+
+	
+	Flight::render('header', array('title' => 'hledání'));
+	dump($stop);
+	// Flight::render('search', ["net"=>$net, 'search'=>$searchFor, 'routes'=>$routes, 'stops'=>$stops]);
+	Flight::render('footer', []);
+});
+
+/*
+
+SELECT * 
+FROM stop_times 
+JOIN stops ON stop_times.stop_id=stops.stop_id
+WHERE trip_id=74192 
+ORDER BY stop_sequence ASC
+
+*/
+
 Flight::start();
