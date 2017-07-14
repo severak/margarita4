@@ -39,6 +39,21 @@ function get_db($net)
 	return $db;
 }
 
+function get_valid_services(sparrow $db, $date='now')
+{
+	$date = date('Y-m-d', strtotime($date));
+	$day = strtolower(date('l', strtotime($date)));
+	
+	$services =  $db->sql('SELECT * FROM calendar WHERE ' . $day . '=1 AND start_date<=' . $db->quote($date) . ' AND end_date>=' . $db->quote($date) )->many();
+	
+	$ret = [];
+	foreach ($services as $service) {
+		$ret[] = $db->quote($service['service_id']);
+	}
+	
+	return implode(',', $ret);
+}
+
 // homepage
 Flight::route('/', function(){
 	Flight::render('header', array('title' => 'margarita 4'));
@@ -83,23 +98,33 @@ Flight::route('/@net/search/', function($net){
 
 Flight::route('/@net/stop/@stop_id/', function($net, $stop_id){
 	$db = get_db($net);
+	
+	$date = date('Y-m-d', strtotime('now'));
+	$time = date('H:i:s', strtotime('now'));
+	
+	if (!empty($_GET['date'])) $date = $_GET['date'];
+	if (!empty($_GET['time'])) $time = $_GET['time'];
+	
 	$stop = $db->from('stops')->where(['stop_id'=>$stop_id])->one();
 	
-	/*
+	if (!$stop) {
+		Flight::notFound();
+	}
 	
+	$services = get_valid_services($db, $date);
+	
+	$trips = $db->sql('
 	SELECT *
 FROM stop_times 
 JOIN trips ON stop_times.trip_id=trips.trip_id
 JOIN routes ON trips.route_id=routes.route_id
-WHERE stop_times.stop_id="U7Z2" AND departure_time>"08:00:00"
+WHERE stop_times.stop_id='.$db->quote($stop_id).' AND departure_time>'.$db->quote($time).' AND service_id IN ('.$services.')
 ORDER BY departure_time ASC
-LIMIT 20
-	*/
+LIMIT 20')->many();
 
 	
-	Flight::render('header', array('title' => 'hledání'));
-	dump($stop);
-	// Flight::render('search', ["net"=>$net, 'search'=>$searchFor, 'routes'=>$routes, 'stops'=>$stops]);
+	Flight::render('header', [ 'title' => 'zastávka ' . $stop['stop_name'] ]);
+	Flight::render('stop', ["net"=>$net, 'stop'=>$stop, 'trips'=>$trips]);
 	Flight::render('footer', []);
 });
 
