@@ -1,6 +1,6 @@
 <form class="pure-form" method="get">
-	<input type="text" name="search" placeholder="číslo linky nebo název stanice" value="<?=$search; ?>">
-	<input type="submit" value="vyhledat">
+	<input type="text" name="search" placeholder="číslo linky nebo název stanice" value="<?=$search; ?>" class="pure-input-2-3">
+	<input type="submit" value="vyhledat" class="pure-button pure-button-primary pure-input-1-3">
 </form>
 
 <?php 
