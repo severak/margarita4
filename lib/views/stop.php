@@ -1,4 +1,4 @@
-<h2><?=$stop['stop_name']; ?><h2>
+<h2><?=$stop['stop_name']; ?></h2>
 
 <table class="pure-table">
 <thead>
