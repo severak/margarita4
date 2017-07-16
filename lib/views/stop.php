@@ -2,18 +2,20 @@
 
 <table class="pure-table">
 <thead>
-<tr><th colspan="3">odjezdy</th></tr>
-<tr><th>linka</th><th>směr</th><th>čas</th></tr>
+<tr><th colspan="4">odjezdy</th></tr>
+<tr><th>linka</th><th>směr</th><th>čas</th><th></th></tr>
 </thead>
 <tbody>
 <?php
 foreach ($trips as $trip) {
 	echo sprintf(
-		'<tr><td><img src="/st/img/route_type_%d.svg" style="height: 1em"> %s</td><td>%s</td><td>%s</td></tr>',
+		'<tr><td><img src="/st/img/route_type_%d.svg" style="height: 1em"> %s</td><td>%s</td><td>%s</td><td><a href="/%s/trip/%s/">spoj »</td></tr>',
 		$trip['route_type'],
 		$trip['route_short_name'],
 		$trip['trip_headsign'],
-		substr($trip['departure_time'], 0, 5)
+		substr($trip['departure_time'], 0, 5),
+		$net,
+		$trip['trip_id']
 	);
 }
 
