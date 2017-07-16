@@ -126,13 +126,15 @@ ORDER BY  substr("        " || route_short_name, -8) ASC')->many();
 	$form->values = $params;
 	
 	Flight::render('header', [ 'title' => 'zastávka ' . $stop['stop_name'] ]);
-	Flight::render('stop', ["net"=>$net, 'stop'=>$stop, 'trips'=>$trips, 'form'=>$form, 'selectRoutes'=>$routesForSelect]);
+	Flight::render('stop', ["net"=>$net, 'stop'=>$stop, 'trips'=>$trips, 'form'=>$form, 'selectRoutes'=>$routesForSelect, 'date'=>$params['date'] ]);
 	Flight::render('footer', []);
 });
 
 
 Flight::route('/@net/trip/@trip_id/', function($net, $trip_id){
 	$db = get_db($net);
+	
+	$date = isset($_GET['date']) ? $_GET['date'] : '';
 	
 	$trip = $db->from('trips')->where(['trip_id'=>$trip_id])->one();
 	
@@ -149,6 +151,6 @@ WHERE trip_id=' . $db->quote($trip_id) .  '
 ORDER BY stop_sequence ASC')->many();
 
 	Flight::render('header', [ 'title' => 'spoj linky ' . $route['route_short_name'] ]);
-	Flight::render('trip', ["net"=>$net, 'stops'=>$stops, 'trip'=>$trip, 'route'=>$route]);
+	Flight::render('trip', ["net"=>$net, 'stops'=>$stops, 'trip'=>$trip, 'route'=>$route, 'date'=>$date]);
 	Flight::render('footer', []);
 });

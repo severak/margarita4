@@ -9,13 +9,14 @@
 <?php
 foreach ($trips as $trip) {
 	echo sprintf(
-		'<tr><td><img src="/st/img/route_type_%d.svg" style="height: 1em"> %s</td><td>%s</td><td>%s</td><td><a href="/%s/trip/%s/">spoj »</td></tr>',
+		'<tr><td><img src="/st/img/route_type_%d.svg" style="height: 1em"> %s</td><td>%s</td><td>%s</td><td><a href="/%s/trip/%s/?date=%s">spoj »</td></tr>',
 		$trip['route_type'],
 		$trip['route_short_name'],
 		$trip['trip_headsign'],
 		substr($trip['departure_time'], 0, 5),
 		$net,
-		$trip['trip_id']
+		$trip['trip_id'],
+		$date
 	);
 }
 
