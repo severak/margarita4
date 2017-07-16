@@ -22,5 +22,25 @@ foreach ($trips as $trip) {
 </tbody>
 </table>
 
+<?= $form->open()->get()->addClass("pure-form pure-form-stacked"); ?>
+<label>Datum</label>
+<?= $form->date('date'); ?>
+<?= $form->showError('date'); ?>
+
+<label>Čas</label>
+<?= $form->text('time'); ?>
+<?= $form->showError('time'); ?>
+
+<label>Jen linka</label>
+<?= $form->select('route', $selectRoutes); ?>
+<?= $form->showError('route'); ?>
+
+<label><?= $form->checkbox('wholeday'); ?> celý den</label>
+
+<?= $form->submit('Zobrazit')->addClass('pure-button pure-button-primary'); ?>
+    
+<?= $form->close(); ?>
+
+
 <?php
 // todo: podobné zastávky - mapa

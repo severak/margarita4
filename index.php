@@ -98,12 +98,11 @@ Flight::route('/@net/search/', function($net){
 
 Flight::route('/@net/stop/@stop_id/', function($net, $stop_id){
 	$db = get_db($net);
-	
-	$date = date('Y-m-d', strtotime('now'));
-	$time = date('H:i:s', strtotime('now'));
-	
-	if (!empty($_GET['date'])) $date = $_GET['date'];
-	if (!empty($_GET['time'])) $time = $_GET['time'];
+
+	$params = $_GET;
+
+	if (empty($params['date'])) $params['date'] = date('Y-m-d', strtotime('now'));
+	if (empty($params['time'])) $params['time'] = date('H:i:s', strtotime('now'));
 	
 	$stop = $db->from('stops')->where(['stop_id'=>$stop_id])->one();
 	
@@ -111,20 +110,39 @@ Flight::route('/@net/stop/@stop_id/', function($net, $stop_id){
 		Flight::notFound();
 	}
 	
-	$services = get_valid_services($db, $date);
+	$services = get_valid_services($db, $params['date']);
+	
+	$timeCond = '';
+	if (empty($params['wholeday'])) $timeCond = 'AND departure_time>='.$db->quote($params['time']);
+	$routeCond = '';
+	if (!empty($params['route'])) $routeCond = ' AND routes.route_id=' . $db->quote($params['route']); 
 	
 	$trips = $db->sql('
 	SELECT *
 FROM stop_times 
 JOIN trips ON stop_times.trip_id=trips.trip_id
 JOIN routes ON trips.route_id=routes.route_id
-WHERE stop_times.stop_id='.$db->quote($stop_id).' AND departure_time>'.$db->quote($time).' AND service_id IN ('.$services.')
+WHERE stop_times.stop_id='.$db->quote($stop_id). $timeCond . $routeCond. ' AND service_id IN ('.$services.')
 ORDER BY departure_time ASC
-LIMIT 20')->many();
+' . (!empty($timeCond) ? 'LIMIT 20' : '') )->many();
 
+	$possibleRoutes = $db->sql('
+	SELECT DISTINCT routes.route_id, route_short_name
+FROM stop_times 
+JOIN trips ON stop_times.trip_id=trips.trip_id
+JOIN routes ON trips.route_id=routes.route_id
+WHERE stop_times.stop_id='.$db->quote($stop_id).' AND service_id IN ('.$services.')
+ORDER BY  substr("        " || route_short_name, -8) ASC')->many();
+	$routesForSelect = [''=> '[všechny]', ];
+	foreach ($possibleRoutes as $route) {
+		$routesForSelect[$route['route_id']] = $route['route_short_name'];
+	}
+	
+	$form = new severak\form;
+	$form->values = $params;
 	
 	Flight::render('header', [ 'title' => 'zastávka ' . $stop['stop_name'] ]);
-	Flight::render('stop', ["net"=>$net, 'stop'=>$stop, 'trips'=>$trips]);
+	Flight::render('stop', ["net"=>$net, 'stop'=>$stop, 'trips'=>$trips, 'form'=>$form, 'selectRoutes'=>$routesForSelect]);
 	Flight::render('footer', []);
 });
 
