@@ -11,7 +11,7 @@
 <body class="margarita-background">
 	
 <div class="margarita-page">	
-<h1><img src="/st/img/aiga_ground.svg" class="margarita-symbol"> jízdní řády
+<h1><img src="/st/img/aiga_ground.svg" class="margarita-symbol"> <a href="/">jízdní řády</a>
 <?php
 if (!empty($net)) {
 	$config = get_config();

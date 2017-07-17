@@ -1,3 +1,8 @@
-<h1>Margarita 4</h1>
-<p>up and running...</p>
-<p>nd ǝɐup ɹnuuᴉuƃ˙˙˙</p>
+<?php
+$config = get_config();
+foreach ($config['net'] as $id=>$net):
+?>
+
+<h2><img src="<?= $net['logo']; ?>" class="margarita-symbol"> <a href="/<?= $id; ?>"><?= $net['name']; ?></a></h2>
+
+<?php endforeach;

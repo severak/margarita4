@@ -9,7 +9,8 @@
 <?php
 foreach ($stops as $stop) {
 	echo sprintf(
-		'<tr><td>%s %s</td><td>%s</td><td><a href="/%s/stop/%s?date=%s&time=%s" class="margarita-noprint">vystoupit »</a></td></tr>',
+		'<tr><td id="stop_%s">%s %s</td><td>%s</td><td><a href="/%s/stop/%s?date=%s&time=%s" class="margarita-noprint">vystoupit »</a></td></tr>',
+		$stop['stop_id'],
 		$stop['stop_name'],
 		($stop['wheelchair_boarding']==1 ? '<img src="/st/img/wheelchair.svg" class="margarita-symbol">' : ''), 
 		substr($stop['departure_time'], 0, 5),

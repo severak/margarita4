@@ -51,21 +51,22 @@ Flight::route('/', function(){
 	Flight::render('footer', []);
 });
 
-// list of routes
-Flight::route('/@net/routes/', function($net){
-	global $route_types;
+Flight::route('/@net/', function($net){
 	$db = get_db($net);
+	$config = get_config();
 	
-	$routes = $db->sql("select * 
-from routes 
-join agency on routes.agency_id=agency.agency_id
-order by printf(\"%8s\", route_short_name) asc")->many();
+	$subways = $db->from('routes')->where(['route_type'=>1])->sortAsc('substr("     " || route_short_name, -5)')->many();
+	$trains = $db->from('routes')->where(['route_type'=>2])->sortAsc('substr("     " || route_short_name, -5)')->many();
+	$trams = $db->from('routes')->where(['route_type'=>0])->sortAsc('substr("     " || route_short_name, -5)')->many();
+	$buses = $db->from('routes')->where(['route_type'=>3])->sortAsc('substr("     " || route_short_name, -5)')->many();
+	$ferries = $db->from('routes')->where(['route_type'=>4])->sortAsc('substr("     " || route_short_name, -5)')->many();
+	$elevators = $db->from('routes')->where(['route_type'=>[5,6,7]])->sortAsc('substr("     " || route_short_name, -5)')->many();
 	
-
-	Flight::render('header', array('title' => 'list of routes'));
-	Flight::render('routes', ["routes"=>$routes, "net"=>$net, "types"=>$route_types]);
+	Flight::render('header', array('title' => $config['net'][$net]['name'], 'net'=>$net));
+	Flight::render('routes', ['subways'=>$subways, 'trains'=>$trains, 'trams'=>$trams, 'buses'=>$buses, 'ferries'=>$ferries, 'elevators'=>$elevators, 'net'=>$net]);
 	Flight::render('footer', []);
 });
+
 
 Flight::route('/@net/search/', function($net){
 	$db = get_db($net);
