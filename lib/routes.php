@@ -80,6 +80,38 @@ Flight::route('/@net/search/', function($net){
 	Flight::render('footer', []);
 });
 
+Flight::route('/@net/route/@route_id/', function($net, $route_id){
+	$db = get_db($net);
+
+	$params = $_GET;
+
+	if (empty($params['date'])) $params['date'] = date('Y-m-d', strtotime('now'));
+
+	$route = $db->from('routes')->where(['route_id'=>$route_id])->one();
+	$agency = $db->from('agency')->where(['agency_id'=>$route['agency_id'] ])->one();
+	
+	if (!$route) {
+		Flight::notFound();
+	}
+	
+	$services = get_valid_services($db, $params['date']);
+	
+	$trips = $db->sql('SELECT *
+FROM trips
+JOIN stop_times ON trips.trip_id=stop_times.trip_id AND stop_sequence=1
+JOIN stops ON stop_times.stop_id=stops.stop_id
+WHERE route_id=' .  $db->quote($route_id) . '  AND service_id IN (' .  $services . ')
+ORDER BY departure_time ASC')->many();
+
+	$form = new severak\form;
+	$form->values = $params;
+	
+	Flight::render('header', [ 'title' => 'linka ' . $route['route_short_name'] ]);
+	Flight::render('route', ["net"=>$net, 'route'=>$route, 'agency'=>$agency, 'trips'=>$trips, 'form'=>$form, 'date'=>$params['date'] ]);
+	Flight::render('footer', []);
+});
+	
+	
 Flight::route('/@net/stop/@stop_id/', function($net, $stop_id){
 	$db = get_db($net);
 
