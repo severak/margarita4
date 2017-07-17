@@ -39,6 +39,13 @@ h2 .margarita-symbol {
 		background: url("/st/img/nocka.jpg") no-repeat fixed center/cover;
 }
 
+h1 a, h2 a {
+		color: black; 
+}
+
+:target {
+		font-weight: bold;
+}
 
 
 @media print {
