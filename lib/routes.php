@@ -175,6 +175,7 @@ Flight::route('/@net/trip/@trip_id/', function($net, $trip_id){
 	}
 	
 	$route= $db->from('routes')->where(['route_id'=>$trip['route_id']])->one();
+	$agency = $db->from('agency')->where(['agency_id'=>$route['agency_id'] ])->one();
 
 	$stops = $db->sql('SELECT * 
 FROM stop_times 
@@ -183,6 +184,6 @@ WHERE trip_id=' . $db->quote($trip_id) .  '
 ORDER BY stop_sequence ASC')->many();
 
 	Flight::render('header', [ 'title' => 'spoj linky ' . $route['route_short_name'] ]);
-	Flight::render('trip', ["net"=>$net, 'stops'=>$stops, 'trip'=>$trip, 'route'=>$route, 'date'=>$date]);
+	Flight::render('trip', ["net"=>$net, 'stops'=>$stops, 'trip'=>$trip, 'route'=>$route, 'agency'=>$agency, 'date'=>$date]);
 	Flight::render('footer', []);
 });

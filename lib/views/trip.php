@@ -24,3 +24,5 @@ foreach ($stops as $stop) {
 ?>
 </tbody>
 </table>
+
+<p>Provozuje: <a href="<?= $agency['agency_url']; ?>"><?= $agency['agency_name']; ?></a></p>
