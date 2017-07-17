@@ -21,6 +21,7 @@
 - vyhezčit CSS, tiskový styl
 - v odkazech přidávat target a zdůraznit ho v css
 - zobrazení šablona + minuty odjezdů (jako na zastávkách) {na to potřebuju *šablony*}
+- nějaký praktický datepicker/timepicker
 
 ## editor
 
