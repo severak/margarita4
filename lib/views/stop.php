@@ -9,7 +9,7 @@
 <?php
 foreach ($trips as $trip) {
 	echo sprintf(
-		'<tr><td><img src="/st/img/route_type_%d.svg" style="height: 1em"> %s</td><td>%s</td><td>%s</td><td><a href="/%s/trip/%s/?date=%s">spoj »</td></tr>',
+		'<tr><td><img src="/st/img/route_type_%d.svg" class="margarita-symbol margarita-noprint"> %s</td><td>%s</td><td>%s</td><td><a href="/%s/trip/%s/?date=%s" class="margarita-noprint">spoj »</td></tr>',
 		$trip['route_type'],
 		$trip['route_short_name'],
 		$trip['trip_headsign'],
@@ -25,6 +25,7 @@ foreach ($trips as $trip) {
 </tbody>
 </table>
 
+<div class="margarita-noprint">
 <?= $form->open()->get()->addClass("pure-form pure-form-stacked"); ?>
 <label>Datum</label>
 <?= $form->date('date'); ?>
@@ -43,6 +44,7 @@ foreach ($trips as $trip) {
 <?= $form->submit('Zobrazit')->addClass('pure-button pure-button-primary'); ?>
     
 <?= $form->close(); ?>
+</div>
 
 
 <?php

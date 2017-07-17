@@ -1,4 +1,4 @@
-<h2><?= $route['route_short_name'] . ' ' . $route['route_long_name']; ?></h2>
+<h2><?=sprintf('<img src="/st/img/route_type_%d.svg" class="margarita-symbol"> <span class="margarita-badge">%s</span> %s', $route['route_type'], $route['route_short_name'], $route['route_long_name']); ?></h2>
 
 <table class="pure-table">
 <thead>
@@ -9,7 +9,7 @@
 <?php
 foreach ($trips as $trip) {
 	echo sprintf(
-		'<tr><td>%s</td><td>%s</td><td>»</td><td>%s</td><td><a href="/%s/trip/%s/?date=%s">spoj »</td></tr>',
+		'<tr><td>%s</td><td>%s</td><td>»</td><td>%s</td><td><a href="/%s/trip/%s/?date=%s" class="margarita-noprint">spoj »</td></tr>',
 		$trip['stop_name'],
 		substr($trip['departure_time'], 0, 5),
 		$trip['trip_headsign'],

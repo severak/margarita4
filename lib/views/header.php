@@ -5,10 +5,18 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="/st/css/pure/pure.css">
 	<link rel="stylesheet" href="/st/css/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="/st/css/margarita.css">
 	<meta property="og:title" content="<?php $title; ?>" />
 </head>
-<body>
+<body class="margarita-background">
 	
-<div style="margin: auto; max-width: 35em;">	
-<h1><img src="/st/img/aiga_ground.svg" style="height: 1em"> jízdní řády</h1>
+<div class="margarita-page">	
+<h1><img src="/st/img/aiga_ground.svg" class="margarita-symbol"> jízdní řády
+<?php
+if (!empty($net)) {
+	$config = get_config();
+	echo '<small> - <a href="/'.$net. '">' . $config['net'][$net]['name'] . '</a></small>';
+}
+?>
+</h1>
 <hr>

@@ -23,6 +23,12 @@ function get_db($net)
 	return $db;
 }
 
+function get_config()
+{
+	global $config;
+	return $config;
+}
+
 function get_valid_services(sparrow $db, $date='now')
 {
 	$date = date('Y-m-d', strtotime($date));
@@ -75,7 +81,7 @@ Flight::route('/@net/search/', function($net){
 		$routes = $db->sql('SELECT * FROM routes WHERE route_short_name LIKE '. $db->quote($searchFor) . ' LIMIT 20')->many();
 	}
 	
-	Flight::render('header', array('title' => 'hledání'));
+	Flight::render('header', array('title' => 'hledání', 'net'=>$net));
 	Flight::render('search', ["net"=>$net, 'search'=>$searchFor, 'routes'=>$routes, 'stops'=>$stops]);
 	Flight::render('footer', []);
 });
@@ -106,7 +112,7 @@ ORDER BY departure_time ASC')->many();
 	$form = new severak\form;
 	$form->values = $params;
 	
-	Flight::render('header', [ 'title' => 'linka ' . $route['route_short_name'] ]);
+	Flight::render('header', [ 'title' => 'linka ' . $route['route_short_name'] , 'net'=>$net]);
 	Flight::render('route', ["net"=>$net, 'route'=>$route, 'agency'=>$agency, 'trips'=>$trips, 'form'=>$form, 'date'=>$params['date'] ]);
 	Flight::render('footer', []);
 });
@@ -157,7 +163,7 @@ ORDER BY  substr("        " || route_short_name, -8) ASC')->many();
 	$form = new severak\form;
 	$form->values = $params;
 	
-	Flight::render('header', [ 'title' => 'zastávka ' . $stop['stop_name'] ]);
+	Flight::render('header', [ 'title' => 'zastávka ' . $stop['stop_name'] , 'net'=>$net]);
 	Flight::render('stop', ["net"=>$net, 'stop'=>$stop, 'trips'=>$trips, 'form'=>$form, 'selectRoutes'=>$routesForSelect, 'date'=>$params['date'] ]);
 	Flight::render('footer', []);
 });
