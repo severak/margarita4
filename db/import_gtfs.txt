@@ -100,7 +100,7 @@ CREATE TABLE trips(
 .print "moving data to tables..."
 
 INSERT INTO agency (agency_id, agency_name, agency_url, agency_timezone, agency_lang, agency_phone) 
-SELECT agency_id, agency_name, agency_url, agency_timezone, agency_lang, agency_phone FROM agency_import;
+SELECT agency_id, agency_name, agency_url, agency_timezone, "", "" FROM agency_import;
 
 -- reformatting dates
 INSERT INTO calendar (service_id, monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_date, end_date)
@@ -112,21 +112,21 @@ FROM calendar_import;
 -- todo: calendar_dates skipped for now
 
 INSERT INTO routes (route_id, agency_id, route_short_name, route_long_name, route_type, route_color)
-SELECT route_id, agency_id, route_short_name, route_long_name, route_type, route_color FROM routes_import;
+SELECT route_id, agency_id, route_short_name, route_long_name, route_type, "" FROM routes_import;
 
 INSERT INTO stops (stop_id,  stop_name,  stop_lat,  stop_lon,  location_type,  parent_station,  wheelchair_boarding)
-SELECT stop_id,  stop_name,  stop_lat,  stop_lon,  location_type,  parent_station,  wheelchair_boarding FROM stops_import;
+SELECT stop_id,  stop_name,  stop_lat,  stop_lon,  0,  NULL,  0 FROM stops_import;
 
 -- padding times
 INSERT INTO stop_times (trip_id,  arrival_time,  departure_time,  stop_id,  stop_sequence,  pickup_type,  drop_off_type)
 SELECT trip_id,
 substr("00:00:00" || arrival_time, -8, 8) as arrival_time,
 substr("00:00:00" || departure_time, -8, 8) as departure_time,
-stop_id,  stop_sequence,  pickup_type,  drop_off_type
+stop_id,  stop_sequence,  0,  0
 FROM stop_times_import;
 
 INSERT INTO trips (route_id,  service_id,  trip_id,  trip_headsign,  shape_id,  wheelchair_accessible)
-SELECT route_id,  service_id,  trip_id,  trip_headsign,  shape_id,  wheelchair_accessible FROM trips_import;
+SELECT route_id,  service_id,  trip_id,  "",  "",  0 FROM trips_import;
 
 .print "baking indexes..."
 
@@ -146,8 +146,8 @@ DROP TABLE stops_import;
 DROP TABLE stop_times_import;
 DROP TABLE trips_import;
 
-VACUUM;
 
 COMMIT;
+VACUUM;
 
 .print "OK. Done."
