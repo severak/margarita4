@@ -34,4 +34,4 @@ foreach ($trips as $trip) {
 <?= $form->close(); ?>
 
 
-<p>Provozuje: <a href="<?= $agency['agency_url']; ?>"><?= $agency['agency_name']; ?></a></p>
+<p>Dopravce: <a href="<?= $agency['agency_url']; ?>"><?= $agency['agency_name']; ?></a></p>

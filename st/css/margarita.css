@@ -26,8 +26,9 @@ h2 .margarita-symbol {
 		color: white;
 		display: inline-block;
 		vertical-align: baseline;
-		padding: 2px;
+		padding: 2px 4px;
 		border-radius: 2px;
+		font-weight: bold;
 }
 
 .margarita-page hr {
@@ -45,6 +46,16 @@ h1 a, h2 a {
 
 :target {
 		font-weight: bold;
+}
+
+.margarita-routes li {
+	padding: 2px;
+	list-style: none;
+}
+
+.margarita-routes li a {
+	text-decoration: none;
+	color: black;
 }
 
 

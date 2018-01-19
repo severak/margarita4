@@ -1,9 +1,9 @@
 <hr>
-<small>aplikace &copy; <a href="http://severak.svita.cz/">Severák</a> 2017;
+<small><a href="https://github.com/severak/margarita4/">aplikace</a> &copy; <a href="http://severak.svita.cz/">Severák</a> 2017-18
 <?php
 if (!empty($net)) {
 	$config = get_config();
-	echo 'data &copy;' . $config['net'][$net]['copyright'];
+	echo ' | data &copy; ' . $config['net'][$net]['copyright'];
 }
 ?>
 </small>
@@ -11,7 +11,9 @@ if (!empty($net)) {
 <?php
 if (!empty($net)) {
 	$config = get_config();
-	echo '<style>.margarita-background { background: url("'.$config['net'][$net]['background'].'") no-repeat fixed center/cover; }</style>';
+	if (!empty($config['net'][$net]['background'])) {
+		echo '<style>.margarita-background { background: url("'.$config['net'][$net]['background'].'") no-repeat fixed center/cover; }</style>';
+	}
 }
 ?>
 

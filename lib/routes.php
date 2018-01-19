@@ -190,7 +190,7 @@ JOIN stops ON stop_times.stop_id=stops.stop_id
 WHERE trip_id=' . $db->quote($trip_id) .  '
 ORDER BY stop_sequence ASC')->many();
 
-	Flight::render('header', [ 'title' => 'spoj linky ' . $route['route_short_name'] ]);
+	Flight::render('header', [ 'title' => 'spoj linky ' . $route['route_short_name'] , 'net'=>$net]);
 	Flight::render('trip', ["net"=>$net, 'stops'=>$stops, 'trip'=>$trip, 'route'=>$route, 'agency'=>$agency, 'date'=>$date]);
 	Flight::render('footer', []);
 });

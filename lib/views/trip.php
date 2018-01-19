@@ -1,4 +1,16 @@
-<h2><?=sprintf('<img src="/st/img/route_type_%d.svg" class="margarita-symbol"> <span class="margarita-badge">%s</span> %s', $route['route_type'], $route['route_short_name'], $trip['trip_headsign']); ?></h2>
+<?php
+$lastStop = end($stops);
+$firstStop = reset($stops);
+
+$trasa = '';
+if ($firstStop != $lastStop) {
+	$trasa = $firstStop['stop_name'] . ' - ' . $lastStop['stop_name'];
+}
+
+?>
+
+
+<h2><?=sprintf('<img src="/st/img/route_type_%d.svg" class="margarita-symbol"> <a href="/%s/route/%s?date=%s"><span class="margarita-badge">%s</span></a> %s', $route['route_type'], $net, $route['route_id'], $date, $route['route_short_name'], $trasa); ?></h2>
 
 <table class="pure-table">
 <thead>
@@ -26,4 +38,4 @@ foreach ($stops as $stop) {
 </tbody>
 </table>
 
-<p>Provozuje: <a href="<?= $agency['agency_url']; ?>"><?= $agency['agency_name']; ?></a></p>
+<p>Dopravce: <a href="<?= $agency['agency_url']; ?>"><?= $agency['agency_name']; ?></a></p>
