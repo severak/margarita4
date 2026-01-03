@@ -10,9 +10,9 @@ require "lib/flight/autoload.php";
 Flight::init();
 Flight::set('flight.handle_errors', false);
 Flight::set('flight.views.path', __DIR__ . '/lib/views');
-require "lib/tracy/src/tracy.php";
-use \Tracy\Debugger;
-Debugger::enable();
+//require "lib/tracy/src/tracy.php";
+//use \Tracy\Debugger;
+//Debugger::enable();
 
 flight\core\Loader::addDirectory("lib/flourish");
 

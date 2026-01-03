@@ -1,4 +1,5 @@
 # margarita4
+
 GTFS timetable viewer
 
 ## prohlížeč jízdních řádů
@@ -11,4 +12,4 @@ Postupem času jsem se k tomuto tématu vracel a zkoušel jsem program vylepšov
 
 ## demo
 
-- [Pražská integrovaná doprava](http://jizdnirady.svita.cz/pid?pk_campaign=github)
+- [Pražská integrovaná doprava](http://jizdnirady.svita.cz/pid?pk_campaign=github) - **NOT UPDATED NOW**

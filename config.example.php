@@ -1,8 +1,8 @@
 <?php
 // path to database
-$config['database'] = 'data/kyselo.sqlite';
+$config['database'] = 'data/pid.sqlite';
 // adminer password
-$config['adminer_password'] = 'jelen';
+$config['adminer_password'] = md5('heslo');
 // site base url
 $config['base_url'] = 'localhost';
 // secret random seed
