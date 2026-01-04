@@ -42,9 +42,112 @@ function get_valid_services(sparrow $db, $date='now')
 		$ret[] = $db->quote($service['service_id']);
 	}
 
-    // TODO - brát ohled na výjimky - https://gtfs.org/documentation/schedule/reference/#calendar_datestxt
+    // adding added services from calendar_dates
+    $servicesAdded =  $db->sql('SELECT * FROM calendar_dates WHERE date='.$db->quote($date).' AND exception_type=1')->many();
+    foreach ($servicesAdded as $service) {
+        $ret[] = $db->quote($service['service_id']);
+    }
+
+    // removing removed services from calendar_dates
+    $servicesRemoved =  $db->sql('SELECT * FROM calendar_dates WHERE date='.$db->quote($date).' AND exception_type=2')->many();
+    $removed = [];
+    foreach ($servicesRemoved as $service) {
+        $removed[] = $db->quote($service['service_id']);
+    }
+    $ret2 = [];
+    foreach ($ret as $serviceId) {
+        if (!in_array($serviceId, $removed)) {
+            $ret2[] = $serviceId;
+        }
+    }
 	
-	return implode(',', $ret);
+	return implode(',', $ret2);
+}
+
+function services_explain(sparrow $db, $serviceId)
+{
+    $services =  $db->sql('SELECT * FROM calendar WHERE service_id=' . $db->quote($serviceId))->many();
+    $jede = [];
+    $nejede = [];
+    $platOd = '';
+    $platDo = '';
+
+    foreach ($services as $service) {
+        if (
+            $service['monday']==0 &&
+            $service['tuesday']==0 &&
+            $service['wednesday']==0 &&
+            $service['thursday']==0 &&
+            $service['friday']==0 &&
+            $service['saturday']==0 &&
+            $service['sunday']==0
+        ) {
+            $jede[] = 'vyjmenované dny';
+        }
+        if (
+            $service['monday']==1 &&
+            $service['tuesday']==1 &&
+            $service['wednesday']==1 &&
+            $service['thursday']==1 &&
+            $service['friday']==1 &&
+            $service['saturday']==1 &&
+            $service['sunday']==1
+        ) {
+            $jede[] = 'každý den';
+        }
+        if (
+            $service['monday']==1 &&
+            $service['tuesday']==1 &&
+            $service['wednesday']==1 &&
+            $service['thursday']==1 &&
+            $service['friday']==1 &&
+            $service['saturday']==0 &&
+            $service['sunday']==0
+        ) {
+            $jede[] = 'pracovní dny';
+        }
+        if (
+            $service['monday']==0 &&
+            $service['tuesday']==0 &&
+            $service['wednesday']==0 &&
+            $service['thursday']==0 &&
+            $service['friday']==0 &&
+            $service['saturday']==1 &&
+            $service['sunday']==1
+        ) {
+            $jede[] = 'víkendy';
+        }
+
+        if (empty($jede)) {
+            if ($service['monday']==1) { $jede[] = 'Po'; }
+            if ($service['tuesday']==1) { $jede[] = 'Út'; }
+            if ($service['wednesday']==1) { $jede[] = 'St'; }
+            if ($service['thursday']==1) { $jede[] = 'Čt'; }
+            if ($service['friday']==1) { $jede[] = 'Pá'; }
+            if ($service['saturday']==1) { $jede[] = 'So'; }
+            if ($service['sunday']==1) { $jede[] = 'Ne'; }
+        }
+
+        $platOd = date('j.n.Y', strtotime($service['start_date']));
+        $platDo = date('j.n.Y', strtotime($service['end_date']));
+
+    }
+
+    // adding added services from calendar_dates
+    $servicesAdded =  $db->sql('SELECT * FROM calendar_dates WHERE service_id='.$db->quote($serviceId).' AND exception_type=1')->many();
+
+    foreach ($servicesAdded as $service) {
+        $jede[] = date('j.n', strtotime($service['date']));
+    }
+
+    // removing removed services from calendar_dates
+    $servicesRemoved =  $db->sql('SELECT * FROM calendar_dates WHERE service_id='.$db->quote($serviceId).' AND exception_type=2')->many();
+
+    foreach ($servicesRemoved as $service) {
+        $nejede[] = date('j.n', strtotime($service['date']));
+    }
+
+    return 'jede: ' . implode(', ', $jede). '<br/>nejede: ' . implode(', ', $nejede) . '<br/>JŘ platí od ' . $platOd . ' do ' . $platDo;
 }
 
 if (!function_exists('str_starts_with')) {
@@ -79,9 +182,10 @@ Flight::route('/@net/', function($net){
 	$buses = $db->from('routes')->where(['route_type'=>3])->sortAsc('substr("     " || route_short_name, -5)')->many();
 	$ferries = $db->from('routes')->where(['route_type'=>4])->sortAsc('substr("     " || route_short_name, -5)')->many();
 	$elevators = $db->from('routes')->where(['route_type'=>[5,6,7]])->sortAsc('substr("     " || route_short_name, -5)')->many();
+    $trolleybuses = $db->from('routes')->where(['route_type'=>11])->sortAsc('substr("     " || route_short_name, -5)')->many();
 	
 	Flight::render('header', array('title' => $config['net'][$net]['name'], 'net'=>$net));
-	Flight::render('routes', ['subways'=>$subways, 'trains'=>$trains, 'trams'=>$trams, 'buses'=>$buses, 'ferries'=>$ferries, 'elevators'=>$elevators, 'net'=>$net]);
+	Flight::render('routes', ['subways'=>$subways, 'trains'=>$trains, 'trams'=>$trams, 'buses'=>$buses, 'ferries'=>$ferries, 'elevators'=>$elevators, 'trolleybuses'=>$trolleybuses, 'net'=>$net]);
 	Flight::render('footer', []);
 });
 

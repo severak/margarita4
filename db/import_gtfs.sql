@@ -131,7 +131,7 @@ INSERT INTO trips (route_id,  service_id,  trip_id,  trip_headsign,  shape_id,  
 SELECT route_id,  service_id,  trip_id,  '',  '',  0 FROM trips_import;
 
 .print "filling missing route short names..."
-UPDATE routes SET route_short_name=route_id WHERE route_short_name='';
+UPDATE routes SET route_short_name=CONCAT('|',route_id) WHERE route_short_name='';
 
 .print "filling missing trip headsigns..."
 

@@ -43,8 +43,17 @@
 </ul>
 <?php endif; ?>
 
+<?php if (count($trolleybuses)): ?>
+    <h2><img src="/st/img/route_type_11.svg" class="margarita-symbol"> linky trolejbusů</h2>
+    <ul>
+        <?php foreach ($trolleybuses as $route): ?>
+            <li><a href="/<?= $net . '/route/' . $route['route_id'];?>"><span class="margarita-badge"><?= $route['route_short_name']; ?></span> <?= $route['route_long_name']; ?></a></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
 
-<?php if (count($ferries)): ?>
+
+    <?php if (count($ferries)): ?>
 <h2><img src="/st/img/route_type_4.svg" class="margarita-symbol"> přívozy</h2>
 <ul>
 <?php foreach ($ferries as $route): ?>

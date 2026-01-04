@@ -38,4 +38,8 @@ foreach ($stops as $stop) {
 </tbody>
 </table>
 
+<p>
+    <?= services_explain(get_db($net), $trip['service_id']) ?>
+</p>
+
 <p>Dopravce: <a href="<?= fix_https_prefix($agency['agency_url']); ?>"><?= $agency['agency_name']; ?></a></p>
