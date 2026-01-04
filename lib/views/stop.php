@@ -26,6 +26,16 @@ foreach ($trips as $trip) {
 </tbody>
 </table>
 
+<?php if (!empty($siblings)) {
+    echo '<p>Sousední zastávky: ';
+    foreach ($siblings as $sibling) {
+        if ($sibling['stop_id']!=$stop['stop_id']) {
+            echo '<a href="/'.$net.'/stop/'.base64_encode($sibling['stop_id']).'">'.$sibling['stop_name'].'</a> ';
+        }
+    }
+    echo '</p>';
+ } ?>
+
 <div class="margarita-noprint">
 <?= $form->open()->get()->addClass("pure-form pure-form-stacked"); ?>
 <label>Datum</label>

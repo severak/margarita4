@@ -93,6 +93,7 @@ CREATE TABLE trips(
   "service_id" TEXT,
   "trip_id" TEXT,
   "trip_headsign" TEXT,
+  "trip_short_name" TEXT,
   "shape_id" TEXT,
   "wheelchair_accessible" INTEGER
 );
@@ -117,7 +118,7 @@ INSERT INTO routes (route_id, agency_id, route_short_name, route_long_name, rout
 SELECT route_id, agency_id, route_short_name, route_long_name, route_type, '' FROM routes_import;
 
 INSERT INTO stops (stop_id,  stop_name,  stop_lat,  stop_lon,  location_type,  parent_station,  wheelchair_boarding)
-SELECT stop_id,  stop_name,  stop_lat,  stop_lon,  0,  NULL,  0 FROM stops_import;
+SELECT stop_id,  stop_name,  stop_lat,  stop_lon,  0,  parent_station,  wheelchair_boarding FROM stops_import;
 
 -- padding times
 INSERT INTO stop_times (trip_id,  arrival_time,  departure_time,  stop_id,  stop_sequence,  pickup_type,  drop_off_type)
@@ -127,8 +128,8 @@ substr('00:00:00' || departure_time, -8, 8) as departure_time,
 stop_id,  stop_sequence,  0,  0
 FROM stop_times_import;
 
-INSERT INTO trips (route_id,  service_id,  trip_id,  trip_headsign,  shape_id,  wheelchair_accessible)
-SELECT route_id,  service_id,  trip_id,  '',  '',  0 FROM trips_import;
+INSERT INTO trips (route_id,  service_id,  trip_id,  trip_headsign, trip_short_name,  shape_id,  wheelchair_accessible)
+SELECT route_id,  service_id,  trip_id,  '', trip_short_name, '',  wheelchair_accessible FROM trips_import;
 
 .print "filling missing route short names..."
 UPDATE routes SET route_short_name=CONCAT('|',route_id) WHERE route_short_name='';

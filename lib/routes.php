@@ -255,7 +255,12 @@ Flight::route('/@net/stop/@stop_id/', function($net, $stop_id){
 	if (!$stop) {
 		Flight::notFound();
 	}
-	
+
+    $siblings = [];
+    if (!empty($stop['parent_station'])) {
+        $siblings = $db->from('stops')->where(['parent_station'=>$stop['parent_station']])->many();
+    }
+
 	$services = get_valid_services($db, $params['date']);
 	
 	$timeCond = '';
@@ -288,7 +293,7 @@ ORDER BY  substr("        " || route_short_name, -8) ASC')->many();
 	$form->values = $params;
 	
 	Flight::render('header', [ 'title' => 'zastávka ' . $stop['stop_name'] , 'net'=>$net]);
-	Flight::render('stop', ["net"=>$net, 'stop'=>$stop, 'trips'=>$trips, 'form'=>$form, 'selectRoutes'=>$routesForSelect, 'date'=>$params['date'] ]);
+	Flight::render('stop', ["net"=>$net, 'stop'=>$stop, 'siblings'=>$siblings, 'trips'=>$trips, 'form'=>$form, 'selectRoutes'=>$routesForSelect, 'date'=>$params['date'] ]);
 	Flight::render('footer', []);
 });
 
