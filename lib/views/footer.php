@@ -1,5 +1,5 @@
 <hr>
-<small><a href="https://github.com/severak/margarita4/">aplikace</a> &copy; <a href="http://severak.svita.cz/">Severák</a> 2017-18
+<small><a href="https://github.com/severak/margarita4/">aplikace</a> &copy; <a href="http://severak.svita.cz/">Severák</a> 2017-25
 <?php
 if (!empty($net)) {
 	$config = get_config();

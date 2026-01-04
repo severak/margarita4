@@ -22,12 +22,12 @@ if ($firstStop != $lastStop) {
 foreach ($stops as $stop) {
 	echo sprintf(
 		'<tr><td id="stop_%s">%s %s</td><td>%s</td><td><a href="/%s/stop/%s?date=%s&time=%s" class="margarita-noprint">vystoupit »</a></td></tr>',
-		$stop['stop_id'],
+		base64_encode($stop['stop_id']),
 		$stop['stop_name'],
 		($stop['wheelchair_boarding']==1 ? '<img src="/st/img/wheelchair.svg" class="margarita-symbol">' : ''), 
 		substr($stop['departure_time'], 0, 5),
 		$net,
-		$stop['stop_id'],
+		base64_encode($stop['stop_id']),
 		$date,
 		$stop['arrival_time']
 	);
@@ -38,4 +38,4 @@ foreach ($stops as $stop) {
 </tbody>
 </table>
 
-<p>Dopravce: <a href="<?= $agency['agency_url']; ?>"><?= $agency['agency_name']; ?></a></p>
+<p>Dopravce: <a href="<?= fix_https_prefix($agency['agency_url']); ?>"><?= $agency['agency_name']; ?></a></p>

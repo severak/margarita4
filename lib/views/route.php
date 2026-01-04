@@ -9,12 +9,12 @@
 <?php
 foreach ($trips as $trip) {
 	echo sprintf(
-		'<tr><td>%s</td><td>%s</td><td>»</td><td>%s</td><td><a href="/%s/trip/%s/?date=%s" class="margarita-noprint">spoj »</td></tr>',
+		'<tr><td>%s</td><td>%s</td><td>»</td><td>%s</td><td><a href="/%s/trip/%s/?date=%s" class="margarita-noprint">spoj »</a></td></tr>',
 		$trip['stop_name'],
 		substr($trip['departure_time'], 0, 5),
 		$trip['trip_headsign'],
 		$net,
-		$trip['trip_id'],
+		base64_encode($trip['trip_id']),
 		$date
 	);
 }
@@ -34,4 +34,4 @@ foreach ($trips as $trip) {
 <?= $form->close(); ?>
 
 
-<p>Dopravce: <a href="<?= $agency['agency_url']; ?>"><?= $agency['agency_name']; ?></a></p>
+<p>Dopravce: <a href="<?= fix_https_prefix($agency['agency_url']); ?>"><?= $agency['agency_name']; ?></a></p>

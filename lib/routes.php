@@ -7,7 +7,8 @@ $route_types = [
 4 => "LOĎ",
 5 => "LANOVKA",
 6 => "LANOVKA",
-7 => "LANOVKA"
+7 => "LANOVKA",
+11 => "TROLEJBUS"
 ];
 
 function get_db($net)
@@ -40,8 +41,25 @@ function get_valid_services(sparrow $db, $date='now')
 	foreach ($services as $service) {
 		$ret[] = $db->quote($service['service_id']);
 	}
+
+    // TODO - brát ohled na výjimky - https://gtfs.org/documentation/schedule/reference/#calendar_datestxt
 	
 	return implode(',', $ret);
+}
+
+if (!function_exists('str_starts_with')) {
+    function str_starts_with(string $haystack, string $needle): bool
+    {
+        return strlen($needle) === 0 || strpos($haystack, $needle) === 0;
+    }
+}
+
+function fix_https_prefix($url)
+{
+    if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+        return $url;
+    }
+    return 'https://'.$url;
 }
 
 // homepage
@@ -121,6 +139,7 @@ ORDER BY departure_time ASC')->many();
 	
 Flight::route('/@net/stop/@stop_id/', function($net, $stop_id){
 	$db = get_db($net);
+    $stop_id = base64_decode($stop_id);
 
 	$params = $_GET;
 
@@ -172,6 +191,7 @@ ORDER BY  substr("        " || route_short_name, -8) ASC')->many();
 
 Flight::route('/@net/trip/@trip_id/', function($net, $trip_id){
 	$db = get_db($net);
+    $trip_id = base64_decode($trip_id);
 	
 	$date = isset($_GET['date']) ? $_GET['date'] : '';
 	

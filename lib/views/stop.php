@@ -15,9 +15,9 @@ foreach ($trips as $trip) {
 		$trip['trip_headsign'],
 		substr($trip['departure_time'], 0, 5),
 		$net,
-		$trip['trip_id'],
+		base64_encode($trip['trip_id']),
 		$date,
-		$trip['stop_id']
+		base64_encode($trip['stop_id'])
 	);
 }
 

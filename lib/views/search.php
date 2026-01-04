@@ -11,7 +11,7 @@ if (count($stops)) {
 		if ($stop['wheelchair_boarding']==1) {
 			$wheel = ' <img src="/st/img/wheelchair.svg" style="height: 1em">'; 
 		}
-		echo sprintf('<a href="/%s/stop/%s">%s</a>%s<br/>', $net, $stop["stop_id"], $stop['stop_name'], $wheel);
+		echo sprintf('<a href="/%s/stop/%s">%s</a>%s<br/>', $net, base64_encode($stop["stop_id"]), $stop['stop_name'], $wheel);
 	}
 }
 
